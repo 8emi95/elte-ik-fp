@@ -1,0 +1,117 @@
+tesztfajlok/hibatlan/01.ok
+tesztfajlok/hibatlan/02.ok
+tesztfajlok/hibatlan/03.ok
+tesztfajlok/hibatlan/04.ok
+tesztfajlok/hibatlan/05.ok
+tesztfajlok/hibatlan/06.ok
+tesztfajlok/lexikalis-hibas/01.lex-hibas
+
+
+Fordítóprogramok, 1. beadandó
+
+Határidők: közel kész megoldás: október 8. (hétfő) éjfél, javítások: október 12. (péntek) éjfél
+Az ajánlott fejlesztőkörnyezet a pandora.inf.elte.hu szerver.
+Tesztfájlok letölthetőek! [tesztfajlok mappa]
+
+Feladat: lexikális elemző elkészítése ehhez a nyelvhez [lent]
+    - flex segítségével (segítség főleg estiseknek: Flex tutorial [fp_flex_tutorial.pdf])
+    - a programnak parancssori paraméterben lehessen megadni az elemzendő fájl nevét
+    - a program minden felismert lexikális elemhez egy sort írjon a képernyőre, például
+    - kulcsszo: if
+    - nyito zarojel
+    - valtozo: b
+
+Lexikális hiba észlelése esetén hibajelzést kell adni, ami tartalmazza a hiba sorának számát; ezután a program befejeződhet, nem kell folytatni az elemzést.
+Ebből a példaprogramból [lexikalis-pelda mappa] érdemes kiindulni
+A beadandó két fájlból álljon, egy flex és egy c++ forrásfájlból. (Generált fájlokat tilos beadni.)
+Az elemzőprogram visszatérési értéke lexikálisan helyes program esetén nulla, egyébként nullától különböző legyen! Ezt figyeli az automatikus tesztelő!
+
+Beadás módja: Ezen az oldalon [bead.inf.elte.hu] az INF-es felhasználónévvel és jelszóval kell belépni, majd jelentkezni a saját gyakorlatvezetőhöz (estiseknek Dévai Gergelyhez) Fordítóprogramok tárgyból. A megoldást a beadandókezelőben olvasható formátumban kell beküldeni.
+Automatikus ellenőrzés: Figyelem! Ehhez a beadandóhoz is lesz automatikus tesztelés, azaz a beküldés után néhány perccel látni fogják az eredményt, de ezt a gyakorlatvezető felülbírálhatja. (Ennek oka, hogy erre a feladatra könnyű olyan megoldást beküldeni, ami a teszteken átmegy, de teljesen használhatatlan lesz, amikor a 2. beadandót próbálják ráépíteni.)
+
+/////////////////////////////////////////
+
+A beadandóhoz használandó programozási nyelv leírása (C++, 2018 ősz)
+A félév során az alábbi programozási nyelvhez kell fordítóprogramot írni flex és bisonc++ segítségével.
+
+A nyelv a C++ erősen leegyszerűsített változata.
+
+Az alábbi példaprogram a bemeneten kapott nemnegatív egész szám legkisebb valódi osztóját számolja ki.
+
+Tesztfájlok letölthetőek!
+
+// A legkisebb valodi oszto meghatarozasa.
+int main()
+{
+  unsigned a;
+  unsigned i;
+  unsigned oszto;
+  bool vanoszto;
+  cin >> a;
+  vanoszto = false;
+  i = 2;
+  while( !vanoszto && i < a )
+  {
+    if( a % i == 0 )
+    {
+      vanoszto = true;
+      oszto = i;
+    }
+    i = i+1;
+  }
+  if( vanoszto )
+  {
+    cout << vanoszto;
+    cout << oszto;
+  }
+  else
+  {
+    cout << vanoszto;
+  }
+}
+
+A nyelv definíciója
+
+Karakterek
+A forrásfájlok a következő ASCII karaktereket tartalmazhatják:
+- az angol abc kis és nagybetűi
+- számjegyek (0-9)
+- (){}+-*/%<>!&|=_;
+- szóköz, tab, sorvége
+Minden más karakter esetén hibajelzést kell adnia a fordítónak, kivéve megjegyzések belsejében, mert ott tetszőleges karakter megengedett. A nyelv case-sensitive, azaz számít a kis és nagybetűk közötti különbség.
+
+Kulcsszavak
+A nyelv kulcsszavai a következők: int, main, unsigned, bool, true, false, if, else, while, cout, cin
+
+Azonosítók
+A változók nevei betűkből, számjegyekből és _ jelből állhatnak, de betűvel kell kezdődniük, és nem ütközhetnek egyik kulcsszóval sem.
+
+Típusok
+- unsigned: négy bájtos, előjel nélküli egészként kell megvalósítani; konstansai számjegyekből állnak és nincs előttük előjel
+- bool: egy bájton kell ábrázolni; értékei: false, true
+
+Megjegyzések
+A // karakterektől kezdve a sor végéig. Megjegyzések a program tetszőleges pontján előfordulhatnak, a fordítást és a keletkező programkódot nem befolyásolják.
+
+A program felépítése
+A program szignatúrából, deklarációs részből és törzsből áll. A szignatúra tartalma: int main(). A szignatúrát a deklarációs rész követi, amely lehet üres is. A törzs legalább egy utasítást tartalmaz.
+
+Változódeklarációk
+Minden változót típus név ; alakban kell deklarálni, több azonos típusú változó esetén mindegyiket külön-külön.
+
+Kifejezések
+- unsigned típusú kifejezések: számkonstansok, unsigned típusú változók és az ezekből a + (összedás), - (kivonás), * (szorzás), / (egészosztás), % (maradékképzés) infix operátorokkal és zárójelekkel felépített kifejezések.
+- bool típusú kifejezések: true és false, bool típusú változók, és két unsigned típusú kifejezésből az == (egyenlőség), < (kisebb), > (nagyobb), <= (kisebb vagy egyenlő), >= (nagyobb vagy egyenlő) infix operátorral, valamint az ezekből && (konjunkció), || (diszjunkció), == (egyenlőség) infix és a ! (negáció) prefix operátorral és zárójelekkel felépített kifejezések.
+- Az infix operátorok mind balasszociatívak és a precedenciájuk növevő sorrendben a következő:
+    - && ||
+    - ==
+    - < > <= >=
+    - + -
+    - / %
+
+Utasítások
+- Értékadás: az = operátorral. Baloldalán egy változó, jobboldalán egy - a változóéval megegyező típusú - kifejezés állhat.
+- Olvasás: A cin » változó; utasítás a megadott változóba olvas be egy megfelelő típusú értéket a konzolról. (Megvalósítása: meg kell hívni a be_egesz (vagy a be_logikai) eljárást, amit a 4. beadandó leírásához mellékelt C fájl tartalmaz. A beolvasott érték az eax (logikai típus esetén az al) regiszterben lesz.)
+- Írás: A cout « kifejezés; utasítás a megadott kifejezés értékét a képernyőre írja (és egy sortöréssel fejezi be). (Megvalósítása: meg kell hívni a ki_egesz (vagy a ki_logikai) eljárást, amit a 4. beadandó leírásához mellékelt C fájl tartalmaz. Paraméterként a kiírandó értéket (mindkét esetben 4 bájtot) kell a verembe tenni.)
+- Ciklus: while ( feltétel ) { utasítások } A feltétel logikai kifejezés, a ciklusmag legalább egy utasítást tartalmaz. A megszokott módon, elöltesztelős ciklusként működik.
+- Elágazás: if( feltétel ) { utasítások } vagy if( feltétel ) { utasítások } else { utasítások } A feltétel logikai kifejezés, az ágak legalább egy utasítást tartalmaznak. Az elágazások a megszokott módon működnek.

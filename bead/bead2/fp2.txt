@@ -1,0 +1,416 @@
+%option noyywrap c++ yylineno
+
+%{
+#include <iostream>
+#include <stdlib.h>
+#include "Parserbase.h"
+%}
+
+DIGIT   [0-9]
+WS      [ \t\n]
+
+%%
+
+{DIGIT}+                return Parser::SZAM; // karakterek
+
+"int"					return Parser::INT;
+"main"					return Parser::MAIN;
+"unsigned"				return Parser::UNSIGNED;
+"bool"					return Parser::BOOL;
+"true"					return Parser::TRUE;
+"false"					return Parser::FALSE;
+"if"         			return Parser::IF;
+"else"        			return Parser::ELSE;
+"while"       			return Parser::WHILE;
+"cout"					return Parser::COUT;
+"cin"					return Parser::CIN;
+
+[a-zA-Z][a-zA-Z0-9_]*   return Parser::AZONOSITO;
+
+"//".*                  //megjegyzesek
+
+"+"         			return Parser::PLUS;
+"-"         			return Parser::MINUS;
+"*"         			return Parser::SZORZAS;
+"/"         			return Parser::OSZTAS;
+"%"         			return Parser::MARADEKKEPZES;
+"("                     return Parser::NYITOZAROJEL;
+")"                     return Parser::CSUKOZAROJEL;
+"=="                    return Parser::EGYENLOSEG;
+"<"                    	return Parser::KISEBB;
+">"                     return Parser::NAGYOBB;
+"<="                    return Parser::KISEBBEGYENLO;
+">="                    return Parser::NAGYOBBEGYENLO;
+"&&"                    return Parser::KONJUNKCIO;
+"||"                    return Parser::DISZJUNKCIO;
+"!"                     return Parser::NEGACIO;
+"="                     return Parser::ERTEKADAS;
+">>"                    return Parser::BEOLVASAS;
+"<<"                    return Parser::KIIRAS;
+
+"{"         			return Parser::NYITOKAPOCS;
+"}"         			return Parser::ZAROKAPOCS;
+";"                     return Parser::PONTOSVESSZO;
+
+{WS}+   // Whitespace
+
+. {
+    std::cerr << lineno() << ": Lexikalis hiba." << std::endl;
+    exit(1);
+}
+
+%%
+
+###
+
+%baseclass-preinclude <iostream>
+%lsp-needed
+
+%token SZAM
+
+%token INT
+%token MAIN
+%token UNSIGNED
+%token BOOL
+%token TRUE
+%token FALSE
+%token IF
+%token ELSE
+%token WHILE
+%token COUT
+%token CIN
+
+%token AZONOSITO
+
+%token NYITOZAROJEL
+%token CSUKOZAROJEL
+%token NYITOKAPOCS
+%token ZAROKAPOCS
+%token PONTOSVESSZO
+%token KIIRAS
+%token BEOLVASAS
+%token SZORZAS
+%token NEGACIO
+%token ERTEKADAS
+
+%left OSZTAS MARADEKKEPZES
+%left PLUS MINUS
+%left NAGYOBB KISEBB KISEBBEGYENLO NAGYOBBEGYENLO
+%left EGYENLOSEG
+%left KONJUNKCIO DISZJUNKCIO
+
+%%
+
+start:
+	INT MAIN NYITOZAROJEL CSUKOZAROJEL NYITOKAPOCS deklaraciok utasitasok ZAROKAPOCS
+	{
+		std::cout<<"S-> INT MAIN NYITOZAROJEL CSUKOZAROJEL NYITOKAPOCS deklaraciok utasitasok ZAROKAPOCS"<<std::endl;
+	}
+;
+	
+deklaraciok:
+	// epszilon
+	{
+		std::cout<<"deklaraciok->epszilon"<<std::endl;
+	}
+|
+	deklaracio deklaraciok
+	{
+		std::cout<<"deklaraciok->deklaracio deklaraciok"<<std::endl;
+	}
+;
+
+deklaracio:
+	UNSIGNED AZONOSITO PONTOSVESSZO
+	{
+		std::cout<<"deklaracio -> UNSIGNED AZONOSITO PONTOSVESSZO"<<std::endl;
+	}
+|
+	BOOL AZONOSITO PONTOSVESSZO
+	{
+		std::cout<<"deklaracio -> BOOL AZONOSITO PONTOSVESSZO "<<std::endl;
+	}
+;
+	
+utasitasok:
+	utasitas
+	{
+		std::cout<<"utasitasok->utasitas "<<std::endl;
+	}
+|
+	utasitas utasitasok
+	{
+		std::cout<<"utasitasok->utasitas utasitasok"<<std::endl;
+	}
+;
+	
+utasitas:	
+	CIN BEOLVASAS kifejezes PONTOSVESSZO
+	{
+		std::cout<<"utasitas ->CIN BEOLVASAS kifejezes PONTOSVESSZO"<<std::endl;
+	}
+|
+	AZONOSITO ERTEKADAS kifejezes PONTOSVESSZO
+	{	
+		std::cout<<"utasitas ->AZONOSITO ERTEKADAS kifejezes PONTOSVESSZO"<<std::endl;
+	}
+|
+	COUT KIIRAS kifejezes PONTOSVESSZO
+	{
+		std::cout<<"utasitas ->COUT KIIRAS kifejezes PONTOSVESSZO"<<std::endl;
+	}
+|
+	elagazas
+	{
+		std::cout<<"utasitas ->elagazas"<<std::endl;
+	}
+|
+	ciklus
+	{
+		std::cout<<"utasitas ->ciklus"<<std::endl;
+	}
+
+;
+
+ciklus:
+	while_cikl
+	{
+		std::cout<<"ciklus->while_cikl"<<std::endl;
+	}
+;
+
+while_cikl:
+	WHILE NYITOZAROJEL kifejezes CSUKOZAROJEL NYITOKAPOCS utasitasok ZAROKAPOCS
+	{
+		std::cout<<"while_cikl->WHILE NYITOZAROJEL kifejezes CSUKOZAROJEL NYITOKAPOCS utasitasok ZAROKAPOCS"<<std::endl;
+	}
+;
+	
+elagazas:
+	IF NYITOZAROJEL kifejezes CSUKOZAROJEL NYITOKAPOCS utasitasok ZAROKAPOCS
+	{
+		std::cout<<"elagazas->IF NYITOZAROJEL kifejezes CSUKOZAROJEL NYITOKAPOCS utasitasok ZAROKAPOCS"<<std::endl;
+	}
+	|
+	IF NYITOZAROJEL kifejezes CSUKOZAROJEL NYITOKAPOCS utasitasok ZAROKAPOCS ELSE NYITOKAPOCS utasitasok ZAROKAPOCS
+	{
+		std::cout<<"elagazas->IF NYITOZAROJEL kifejezes CSUKOZAROJEL NYITOKAPOCS utasitasok ZAROKAPOCS ELSE NYITOKAPOCS utasitasok ZAROKAPOCS"<<std::endl;
+	}
+;
+	
+kifejezes:
+	SZAM
+	{
+		std::cout<<"kifejezes->SZAM"<<std::endl;
+	}
+|
+	TRUE
+	{
+		std::cout<<"kifejezes->TRUE"<<std::endl;
+	}
+|
+	FALSE
+	{
+		std::cout<<"kifejezes->FALSE"<<std::endl;
+	}
+|
+	AZONOSITO
+	{
+		std::cout<<"kifejezes->AZONOSITO"<<std::endl;
+	}
+|
+	kifejezes PLUS kifejezes
+	{
+		std::cout<<"kifejezes->kifejezes PLUS kifejezes"<<std::endl;
+	}
+|
+	kifejezes MINUS kifejezes
+	{
+		std::cout<<"kifejezes->kifejezes MINUS kifejezes"<<std::endl;
+	}
+|
+	kifejezes SZORZAS kifejezes
+	{
+		std::cout<<"kifejezes->kifejezes SZORZAS kifejezes"<<std::endl;
+	}
+|
+	kifejezes OSZTAS kifejezes
+	{
+		std::cout<<"kifejezes->kifejezes OSZTAS kifejezes"<<std::endl;
+	}
+|
+	kifejezes MARADEKKEPZES kifejezes
+	{
+		std::cout<<"kifejezes->kifejezes MARADEKKEPZES kifejezes"<<std::endl;
+	}
+|
+	kifejezes EGYENLOSEG kifejezes
+	{
+		std::cout<<"kifejezes->kifejezes EGYENLOSEG kifejezes"<<std::endl;
+	}
+|
+	kifejezes KISEBB kifejezes
+	{
+		std::cout<<"kifejezes->kifejezes KISEBB kifejezes"<<std::endl;
+	}
+|
+	kifejezes NAGYOBB kifejezes
+	{
+		std::cout<<"kifejezes->kifejezes NAGYOBB kifejezes"<<std::endl;
+	}
+|
+	kifejezes KONJUNKCIO kifejezes
+	{
+		std::cout<<"kifejezes->kifejezes KONJUNKCIO kifejezes"<<std::endl;
+	}
+|
+	kifejezes DISZJUNKCIO kifejezes
+	{
+		std::cout<<"kifejezes->kifejezes DISZJUNKCIO kifejezes"<<std::endl;
+	}
+|
+	NEGACIO kifejezes
+	{
+		std::cout<<"kifejezes->NEGACIO kifejezes"<<std::endl;
+	}
+|
+	kifejezes NAGYOBBEGYENLO kifejezes
+	{
+		std::cout<<"kifejezes->kifejezes NAGYOBBEGYENLO kifejezes"<<std::endl;
+	}	
+|
+	kifejezes KISEBBEGYENLO kifejezes
+	{
+		std::cout<<"kifejezes->kifejezes KISEBBEGYENLO kifejezes"<<std::endl;
+	}	
+|
+	NYITOZAROJEL kifejezes CSUKOZAROJEL
+	{
+		std::cout<<"kifejezes->NYITOZAROJEL kifejezes CSUKO"<<std::endl;
+	}	
+|
+	NYITOKAPOCS kifejezes ZAROKAPOCS
+	{
+		std::cout<<"kifejezes->NYITOKAPOCS kifejezes ZAROKAPOCS"<<std::endl;
+	}
+;
+
+###
+
+// Generated by Bisonc++ V4.09.02 on Wed, 28 Oct 2015 08:24:48 +0100
+
+#ifndef Parser_h_included
+#define Parser_h_included
+
+// $insert baseclass
+#include "Parserbase.h"
+#include "FlexLexer.h"
+#include <cstdlib>
+
+#undef Parser
+class Parser: public ParserBase
+{
+        
+    public:
+		Parser( std::istream & in ) : lexer( &in, &std::cerr ) {}
+        int parse();
+
+    private:
+        yyFlexLexer lexer;
+        void error(char const *msg);    // called on (syntax) errors
+        int lex();                      // returns the next token from the
+                                        // lexical scanner. 
+        void print();                   // use, e.g., d_token, d_loc
+
+    // support functions for parse():
+        void executeAction(int ruleNr);
+        void errorRecovery();
+        int lookup(bool recovery);
+        void nextToken();
+        void print__();
+        void exceptionHandler__(std::exception const &exc);
+};
+
+
+#endif
+
+###
+
+// Generated by Bisonc++ V4.09.02 on Wed, 28 Oct 2015 08:24:48 +0100
+
+    // Include this file in the sources of the class Parser.
+
+// $insert class.h
+#include "Parser.h"
+
+
+inline void Parser::error(char const *msg)
+{
+    std::cerr << d_loc__.first_line << ".: Szintaktikus hiba." << std::endl; 
+    exit(1);
+}
+
+// $insert lex
+inline int Parser::lex()
+{
+    d_loc__.first_line = lexer.lineno();
+    return lexer.yylex();
+}
+
+inline void Parser::print()         
+{
+    print__();           // displays tokens if --print was specified
+}
+
+inline void Parser::exceptionHandler__(std::exception const &exc)         
+{
+    throw;              // re-implement to handle exceptions thrown by actions
+}
+
+
+    // Add here includes that are only required for the compilation 
+    // of Parser's sources.
+
+
+
+    // UN-comment the next using-declaration if you want to use
+    // int Parser's sources symbols from the namespace std without
+    // specifying std::
+
+//using namespace std;
+
+###
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include "Parser.h"
+#include <FlexLexer.h>
+
+using namespace std;
+
+void input_handler( ifstream& in, int argc, char* argv[] );
+
+int main( int argc, char* argv[] )
+{
+    ifstream in;
+    input_handler( in, argc, argv );
+    Parser pars( in );
+    pars.parse();
+    return 0;
+}
+
+void input_handler( ifstream& in, int argc, char* argv[] )
+{
+    if( argc < 2 )
+    {
+        cerr << "A forditando fajl nevet parancssori parameterben kell megadni." << endl;
+        exit(1);
+    }
+    in.open( argv[1] );
+    if( !in )
+    {
+        cerr << "A " << argv[1] << " fajlt nem sikerult megnyitni." << endl;
+        exit(1);
+    }
+}

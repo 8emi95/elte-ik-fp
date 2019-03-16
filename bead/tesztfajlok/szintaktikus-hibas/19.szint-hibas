@@ -1,0 +1,5 @@
+// A legkisebb valodi oszto meghatarozasa.
+int main()
+{
+	if(true){ cout << 1; } else {}
+}

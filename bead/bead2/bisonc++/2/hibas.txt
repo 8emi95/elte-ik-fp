@@ -1,0 +1,1 @@
+char betuje( s, int index );

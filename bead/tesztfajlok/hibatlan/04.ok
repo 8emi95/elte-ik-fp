@@ -1,0 +1,15 @@
+// A legkisebb valodi oszto meghatarozasa.
+int main()
+{
+	unsigned a;
+	unsigned b;
+	cin >> a;
+	cin >> b;
+	cout << a + b;
+	cout << a - b;
+	cout << a * b;
+	cout << a / b;
+	cout << a % b;
+	cout << a <= b;
+	cout << a >= b;
+}

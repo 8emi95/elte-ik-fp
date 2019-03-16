@@ -1,0 +1,29 @@
+// A legkisebb valodi oszto meghatarozasa.
+int main()
+{
+  unsigned a;
+  unsigned i;
+  unsigned oszto;
+  bool vanoszto;
+  cin >> a;
+  vanoszto = false;
+  i = 2;
+  while( !vanoszto && i < a )
+  {
+    if( a % i = 0 )
+    {
+      vanoszto = true;
+      oszto = i;
+    }
+    i = i+1;
+  }
+  if( vanoszto )
+  {
+    cout << vanoszto;
+    cout << oszto;
+  }
+  else
+  {
+    cout << vanoszto;
+  }
+}

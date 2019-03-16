@@ -1,0 +1,8 @@
+// A legkisebb valodi oszto meghatarozasa.
+int main()
+{
+  unsigned a;
+  unsigned i;
+  unsigned oszto;
+  bool vanoszto;
+}

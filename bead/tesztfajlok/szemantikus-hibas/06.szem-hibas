@@ -1,0 +1,5 @@
+int main()
+{
+	unsigned a;
+	cout << (false && true) / a;
+}

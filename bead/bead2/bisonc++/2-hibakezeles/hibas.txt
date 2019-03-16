@@ -1,0 +1,4 @@
+char betuje( s, int index );
+char betuje( string s, int index );
+char betuje string s, int index );
+char betuje( string s, int index );

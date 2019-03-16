@@ -1,0 +1,26 @@
+Fordítóprogramok, 2. beadandó
+Határidő: közel kész megoldás: november 5. (hétfő) éjfél, javítások: november 9. (péntek) éjfél
+Tesztfájlok a beadandók ellenőrzéséhez letölthetőek.
+Az ajánlott fejlesztőkörnyezet a pandora.inf.elte.hu szerver.
+Feladat: szintaktikus elemző elkészítése ehhez a nyelvhez
+bisonc++ segítségével (segítség főleg estiseknek: Bisonc++ tutorial [http://deva.web.elte.hu/fordprog/bisoncpp-tutorial.pdf])
+a programnak parancssori paraméterben lehessen megadni az elemzendő fájl nevét
+a program minden alkalmazott szabályhoz egy sort írjon a képernyőre, például
+        ertekadas -> azonosito ERTEKADAS kifejezes PONTOSVESSZO
+        utasitas -> ertekadas
+        ...
+szintaktikus hiba észlelése esetén hibajelzést kell adni, és a fordítóprogram visszatérési értéke 1 legyen (azaz exit(1) utasítást kell végrehajtani a hibajelzés után)
+ha a forrásfájl szintaktikusan helyes, akkor a fordítóprogram visszatérési értéke legyen 0 (azaz return 0 utasítással fejeződjön be)
+ebből a példaprogramból [http://deva.web.elte.hu/fordprog/szintaktikus-pelda.zip] érdemes kiindulni
+a tesztfájlok közül a lexikalis_hibas és szintaktikus_hibas kiterjesztésű fájlokra kell hibát jelezni, a többit el kell fogadni.
+Beadás módja:
+Ezen az oldalon [https://bead.inf.elte.hu/] kell a szintaktikus elemző feladatra beadni a forrásfájlokat az alábbi formában:
+        flex forrásfájl (.l)
+        ###
+        bisonc++ forrásfájl (.y)
+        ###
+        Parser.h headerfile
+        ###
+        Parser.ih implementációs headerfile
+        ###
+        c++ forrásfájl (main)

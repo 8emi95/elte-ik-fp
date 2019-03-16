@@ -1,0 +1,8 @@
+int main()
+{
+	bool a;
+	unsigned b;
+	cin >> a;
+	cin >> b;
+	cout << a <= b;
+}

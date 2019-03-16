@@ -1,0 +1,110 @@
+%option noyywrap c++ yylineno
+
+%{
+#include <iostream>
+#include <cstdlib>
+%}
+
+DIGIT   [0-9]
+WS  [ \t\n]
+
+%%
+
+{DIGIT}+	std::cout << "NUMBER " << YYText() << std::endl;
+
+"+"		std::cout << "PLUS " << YYText() << std::endl;
+"-"		std::cout << "MINUS " << YYText() << std::endl;
+"*"		std::cout << "MULTIPLICATION " << YYText() << std::endl;
+"("		std::cout << "OPEN " << YYText() << std::endl;
+")"		std::cout << "CLOSE " << YYText() << std::endl;
+">"		std::cout << "GREATER-THAN " << YYText() << std::endl;
+"<"		std::cout << "LESS-THAN " << YYText() << std::endl;
+"="		std::cout << "EQUAL " << YYText() << std::endl;
+":="		std::cout << "DEFINITION " << YYText() << std::endl;
+".."		std::cout << "FOR " << YYText() << std::endl;
+";"		std::cout << "SEMICOLON " << YYText() << std::endl;
+"#".*			std::cout << "COMMENT "  << std::endl;
+
+program			std::cout << "KEYWORD " << YYText() << std::endl;
+begin			std::cout << "KEYWORD " << YYText() << std::endl;
+end			std::cout << "KEYWORD " << YYText() << std::endl;
+natural			std::cout << "KEYWORD " << YYText() << std::endl;
+boolean			std::cout << "KEYWORD " << YYText() << std::endl;
+true			std::cout << "KEYWORD " << YYText() << std::endl;
+false			std::cout << "KEYWORD " << YYText() << std::endl;
+div			std::cout << "KEYWORD " << YYText() << std::endl;
+mod			std::cout << "KEYWORD " << YYText() << std::endl;
+and			std::cout << "KEYWORD " << YYText() << std::endl;
+or			std::cout << "KEYWORD " << YYText() << std::endl;
+not			std::cout << "KEYWORD " << YYText() << std::endl;
+skip			std::cout << "KEYWORD " << YYText() << std::endl;
+if			std::cout << "KEYWORD " << YYText() << std::endl;
+then			std::cout << "KEYWORD " << YYText() << std::endl;
+else			std::cout << "KEYWORD " << YYText() << std::endl;
+endif			std::cout << "KEYWORD " << YYText() << std::endl;
+while			std::cout << "KEYWORD " << YYText() << std::endl;
+for			std::cout << "KEYWORD " << YYText() << std::endl;
+in			std::cout << "KEYWORD " << YYText() << std::endl;
+do			std::cout << "KEYWORD " << YYText() << std::endl;
+done			std::cout << "KEYWORD " << YYText() << std::endl;
+read			std::cout << "KEYWORD " << YYText() << std::endl;
+write			std::cout << "KEYWORD " << YYText() << std::endl;
+
+[a-zA-Z_][a-zA-Z0-9_]*	std::cout << "VARIABLE " << YYText() << std::endl;
+
+{WS}+       // Whitespace
+
+. {
+	std::cerr << lineno() << ": Lexikalis hiba." << std::endl;
+	exit(1);
+}
+			
+": =" {
+	std::cerr << lineno() << ": Lexikalis hiba." << std::endl;
+	exit(1);
+}
+
+[0-9]+"."[0-9]+	{
+	std::cerr << lineno() << ": Lexikalis hiba." << std::endl;
+	exit(1);
+}
+
+%%
+
+###
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <FlexLexer.h>
+#include <cstdlib>
+
+using namespace std;
+
+
+
+void input_handler( ifstream& in, int argc, char* argv[] );
+
+int main( int argc, char* argv[] )
+{
+    ifstream in;
+    input_handler( in, argc, argv );
+    yyFlexLexer fl(&in, &cout);
+    fl.yylex();
+    return 0;
+}
+
+void input_handler( ifstream& in, int argc, char* argv[] )
+{
+    if( argc < 2 )
+    {
+        cerr << "A forditando fajl nevet parancssori parameterben kell megadni." << endl;
+        exit(1);
+    }
+    in.open( argv[1] );
+    if( !in )
+    {
+        cerr << "A " << argv[1] << "fajlt nem sikerult megnyitni." << endl;
+        exit(1);
+    }
+}

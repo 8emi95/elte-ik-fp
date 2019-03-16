@@ -1,0 +1,6 @@
+int main()
+{
+	unsigned a;
+	bool b;
+	cout << a % b;
+}

@@ -1,0 +1,1 @@
+[ alma, barack, 42, szilva ]

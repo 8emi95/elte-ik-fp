@@ -1,0 +1,14 @@
+// komment
+int main() // komment
+{ // komment
+	bool a;// komment
+	bool b;// komment
+	cin >> a;          // komment
+	       // komment
+	cin >> b; // komment
+	cout << a && b;// komment
+	cout << a || b;             // komment
+	cout << !a;// komment
+} // komment
+// komment
+// komment

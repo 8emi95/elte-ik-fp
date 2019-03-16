@@ -1,0 +1,12 @@
+PROGRAM pelda
+VALTOZOK:
+  IDO t
+  IDO tt
+  EGESZ n
+UTASITASOK:
+  t := 15:45
+  tt := t
+  n := ora(tt) + ora(16:15)
+  KI: n
+  KI: perc(t)
+PROGRAM_VEGE

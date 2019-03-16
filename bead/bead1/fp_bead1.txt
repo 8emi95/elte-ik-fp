@@ -1,0 +1,99 @@
+%option noyywrap c++ yylineno
+
+%{
+#include <iostream>
+#include <cstdlib>
+%}
+
+DIGIT   [0-9]
+WS      [ \t\n]
+
+%%
+
+{DIGIT}+                std::cout << "szam:                     " << YYText() << std::endl; // karakterek
+
+int                     std::cout << "kulcsszo:                 " << YYText() << std::endl; // kulcsszavak
+main                    std::cout << "kulcsszo:                 " << YYText() << std::endl;
+unsigned                std::cout << "kulcsszo:                 " << YYText() << std::endl;
+bool                    std::cout << "kulcsszo:                 " << YYText() << std::endl;
+true                    std::cout << "kulcsszo:                 " << YYText() << std::endl;
+false                   std::cout << "kulcsszo:                 " << YYText() << std::endl;
+if                      std::cout << "kulcsszo:                 " << YYText() << std::endl;
+else                    std::cout << "kulcsszo:                 " << YYText() << std::endl;
+while                   std::cout << "kulcsszo:                 " << YYText() << std::endl;
+cout                    std::cout << "kulcsszo:                 " << YYText() << std::endl;
+cin                     std::cout << "kulcsszo:                 " << YYText() << std::endl;
+
+[a-zA-Z][a-zA-Z0-9_]*   std::cout << "valtozo:                  " << YYText() << std::endl; // azonositok
+
+"//".*                  std::cout << "megjegyzes:               " << YYText() << std::endl; // megjegyzesek
+
+"+"                     std::cout << "osszeadas:                " << YYText() << std::endl; // operatorok
+"-"                     std::cout << "kivonas:                  " << YYText() << std::endl;
+"*"                     std::cout << "szorzas:                  " << YYText() << std::endl;
+"/"                     std::cout << "osztas:                   " << YYText() << std::endl;
+"%"                     std::cout << "maradekkepzes:            " << YYText() << std::endl;
+"("                     std::cout << "nyito zarojel:            " << YYText() << std::endl;
+")"                     std::cout << "zaro zarojel:             " << YYText() << std::endl;
+"=="                    std::cout << "egyenloseg:               " << YYText() << std::endl;
+"<"                     std::cout << "kisebb:                   " << YYText() << std::endl;
+">"                     std::cout << "nagyobb:                  " << YYText() << std::endl;
+"<="                    std::cout << "kisebb vagy egyenlo:      " << YYText() << std::endl;
+">="                    std::cout << "nagyobb vagy egyenlo:     " << YYText() << std::endl;
+"&&"                    std::cout << "konjunkcio:               " << YYText() << std::endl;
+"||"                    std::cout << "diszjunkcio:              " << YYText() << std::endl;
+"!"                     std::cout << "negacio:                  " << YYText() << std::endl;
+"="                     std::cout << "ertekadas:                " << YYText() << std::endl;
+">>"                    std::cout << "beolvasas:                " << YYText() << std::endl;
+"<<"                    std::cout << "kiiras:                   " << YYText() << std::endl;
+
+"{"                     std::cout << "nyito kapcsos zarojel:    " << YYText() << std::endl; // torzs, utasitas
+"}"                     std::cout << "zaro kapcsos zarojel:     " << YYText() << std::endl;
+";"                     std::cout << "pontosvesszo:             " << YYText() << std::endl;
+
+{WS}+   // Whitespace
+
+. {
+    std::cerr << lineno() << ": Lexikalis hiba." << std::endl;
+    exit(1);
+}
+
+%%
+
+###
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <FlexLexer.h>
+#include <cstdlib>
+
+using namespace std;
+
+
+
+void input_handler( ifstream& in, int argc, char* argv[] );
+
+int main( int argc, char* argv[] )
+{
+    ifstream in;
+    input_handler( in, argc, argv );
+    yyFlexLexer fl(&in, &cout);
+    fl.yylex();
+    return 0;
+}
+
+void input_handler( ifstream& in, int argc, char* argv[] )
+{
+    if( argc < 2 )
+    {
+        cerr << "A forditando fajl nevet parancssori parameterben kell megadni." << endl;
+        exit(1);
+    }
+    in.open( argv[1] );
+    if( !in )
+    {
+        cerr << "A " << argv[1] << "fajlt nem sikerult megnyitni." << endl;
+        exit(1);
+    }
+}
